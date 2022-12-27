@@ -1,4 +1,4 @@
-/*import { renderHook, act } from "@testing-library/react-hooks";
+import { renderHook, act } from "@testing-library/react-hooks";
 
 import useVisualMode from "hooks/useVisualMode";
 
@@ -54,4 +54,5 @@ test("useVisualMode should replace the current mode", () => {
 
   act(() => result.current.back());
   expect(result.current.mode).toBe(FIRST);
-});*/
+
+});
