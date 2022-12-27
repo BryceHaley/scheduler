@@ -9,10 +9,24 @@ export function getAppointmentsForDay(state, day) {
         for (const entry in dayEntries) {
           dayEntryAppointmentsArr = dayEntryAppointmentsArr.concat(dayEntries[entry].appointments);
         }
-        //console.log(dayEntryAppointmentsArr)
         const appointments = state.appointments;
         appointmentsArr = Object.values(appointments).filter((item)=> dayEntryAppointmentsArr.includes(item.id))
       }
   }
   return appointmentsArr;
+};
+
+export function getInterview(state, interview) {
+  if (!interview) {return null}
+  const id = interview.interviewer;
+
+  let retObj = {
+    student: interview.student,
+    interviewer: {
+      id: state.interviewers[id].id,
+      name: state.interviewers[id].name,
+      avatar: state.interviewers[id].avatar
+    }
+  };
+  return retObj;
 };
