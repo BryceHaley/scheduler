@@ -4,12 +4,14 @@ import axios from "axios";
 import DayList from "./DayList.jsx"
 import Appointment from "./Appointment/index.js";
 import { getAppointmentsForDay, getInterview } from '../helpers/selectors.js'
+import useVisualMode from "hooks/useVisualMode.js";
 
 import "components/Application.scss";
 
 const GET_DAYS = "http://localhost:8001/api/days"
 const GET_APPOINTMENTS = "http://localhost:8001/api/appointments"
 const GET_INTERVIEWERS = "http://localhost:8001/api/interviewers"
+
 
 
 export default function Application(props) {
@@ -19,8 +21,7 @@ export default function Application(props) {
     interviewers: {},
     appointments: {}
   });
-
-
+  console.log(state);
 
   const setDay = day => setState(prev => ({ ...prev, day }));
 
