@@ -4,6 +4,10 @@
 
 $appointment-height: 11rem;
 
+.appointment:last-of-type .appointment__add {
+  display: none;
+}
+
 .appointment {
   &__add {
     min-height: $appointment-height;
