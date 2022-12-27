@@ -1,3 +1,6 @@
+
+/*Helper function takes in a state object and a day string
+returns array of appointments in the form of their integer keys */
 export function getAppointmentsForDay(state, day) {
   let appointmentsArr = [];
     //return empty array if state has no days
@@ -15,7 +18,8 @@ export function getAppointmentsForDay(state, day) {
   }
   return appointmentsArr;
 };
-
+/*Helper function takes in a state object and an interview object
+returns an object of with detailed interviewer infomation added to the interview object*/
 export function getInterview(state, interview) {
   if (!interview) {return null}
   const id = interview.interviewer;
@@ -31,6 +35,16 @@ export function getInterview(state, interview) {
   return retObj;
 };
 
+/** Helper function takes in a state object and a day string
+ * returns an array of integers whose entries are integer keys for available interviewers
+ */
 export function getInterviewersForDay(state, day) {
-  return [];
+  let interviewersArr = [];
+  for (const dayEntry of state.days) {
+    interviewersArr = dayEntry.name === day ? interviewersArr.concat(dayEntry.interviewers) : interviewersArr;
+  }
+  interviewersArr = interviewersArr.map(entry => state.interviewers[entry]);
+
+
+  return interviewersArr;
 }
