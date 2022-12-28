@@ -26,26 +26,31 @@ export default function Appointment (props) {
   );
 
   const save = async (name, interviewer) => {
-    const interview = {
-      student: name,
-      interviewer
-    };
-    transition(SAVING)
-    try {
-      const res = await props.bookInterviews(props.id, interview);
-      if(res.status === 204) {
-        transition(SHOW);
-      } else {
+    console.log('interviewer',interviewer)
+    if (name === "" || !interviewer) {
+      transition(ERROR_SAVE, true);
+    } else {
+      const interview = {
+        student: name,
+        interviewer
+      };
+      transition(SAVING, true)
+      try {
+        const res = await props.bookInterviews(props.id, interview);
+        if(res.status === 204) {
+          transition(SHOW);
+        } else {
+          transition(ERROR_SAVE, true);
+        }
+      } catch (error) {
+        console.error(error);
         transition(ERROR_SAVE, true);
       }
-    } catch (error) {
-      console.error(error);
-      transition(ERROR_SAVE, true);
     }
   }
 
   const deleteInterview = async () => {
-    transition(DELETING);
+    transition(DELETING, true);
     try {
       const res = await props.cancelInterview(props.id);
     if(res.status === 204) {
