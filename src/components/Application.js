@@ -7,9 +7,9 @@ import { getAppointmentsForDay, getInterview, getInterviewersForDay } from '../h
 
 import "components/Application.scss";
 
-const GET_DAYS = "http://localhost:8001/api/days"
-const GET_APPOINTMENTS = "http://localhost:8001/api/appointments"
-const GET_INTERVIEWERS = "http://localhost:8001/api/interviewers"
+const DAYS = "http://localhost:8001/api/days"
+const APPOINTMENTS = "http://localhost:8001/api/appointments"
+const INTERVIEWERS = "http://localhost:8001/api/interviewers"
 
 export default function Application(props) {
   
@@ -22,9 +22,9 @@ export default function Application(props) {
 
   useEffect(()=> {
     Promise.all([
-      axios.get(GET_DAYS),
-      axios.get(GET_APPOINTMENTS),
-      axios.get(GET_INTERVIEWERS)
+      axios.get(DAYS),
+      axios.get(APPOINTMENTS),
+      axios.get(INTERVIEWERS)
     ]).then((all) => {
       setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}))
     })
@@ -32,8 +32,8 @@ export default function Application(props) {
 
   const setDay = day => setState(prev => ({ ...prev, day }));
   
-  const bookInterviews = function(id, interview) {
-    console.log(id, interview);
+  const bookInterviews = async (id, interview) => {
+    //console.log(id, interview);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -43,8 +43,12 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
-    console.log(appointments);
-    setState({...state, appointments});
+    //console.log(interview);
+    
+    const response =  await axios.put(APPOINTMENTS + "/" + id, appointment)
+      .then(setState({...state, appointments}))
+    
+      return response;
   }
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
