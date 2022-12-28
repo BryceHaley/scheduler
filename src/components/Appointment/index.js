@@ -7,45 +7,57 @@ import useVisualMode from "hooks/useVisualMode";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
+import Error from "./Error";
 
 
-const EMPTY     = "EMPTY";
-const SHOW      = "SHOW";
-const CREATE    = "CREATE";
-const SAVING    = "SAVING";
-const DELETING  = "DELETING";
-const CONFIRM   = "CONFIRM";
-const EDIT      = "EDIT"
+const EMPTY         = "EMPTY";
+const SHOW          = "SHOW";
+const CREATE        = "CREATE";
+const SAVING        = "SAVING";
+const DELETING      = "DELETING";
+const CONFIRM       = "CONFIRM";
+const EDIT          = "EDIT";
+const ERROR_DELETE  = "ERROR_DELETE";
+const ERROR_SAVE    = "ERROR_SAVE";
 
 export default function Appointment (props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
-  console.log(props.interview);
+
   const save = async (name, interviewer) => {
     const interview = {
       student: name,
       interviewer
     };
     transition(SAVING)
-    const res = await props.bookInterviews(props.id, interview);
-    if(res.status === 204) {
-      transition(SHOW);
-    } else {
-      transition(EMPTY);
+    try {
+      const res = await props.bookInterviews(props.id, interview);
+      if(res.status === 204) {
+        transition(SHOW);
+      } else {
+        transition(ERROR_SAVE, true);
+      }
+    } catch (error) {
+      console.error(error);
+      transition(ERROR_SAVE, true);
     }
   }
 
   const deleteInterview = async () => {
     transition(DELETING);
-    const res = await props.cancelInterview(props.id);
-
+    try {
+      const res = await props.cancelInterview(props.id);
     if(res.status === 204) {
       transition(EMPTY);
       props.removeInterviewFromClient(props.id)
     } else {
-      transition(SHOW);
+      transition(ERROR_DELETE, true);
     }
+  } catch (error){
+    console.error(error);
+    transition(ERROR_DELETE, true);
+  }
   }
 
   
@@ -80,6 +92,14 @@ export default function Appointment (props) {
       student={props.interview.student}
       interviewer={props.interview.interviewer.id}>
     </Form>}
+    {mode === ERROR_SAVE && <Error
+      message={"Failed ot save appointment..."}
+      onClose={back}
+    ></Error>}
+      {mode === ERROR_DELETE && <Error
+      message={"Failed ot delete appointment..."}
+      onClose={back}
+    ></Error>}
       
   </article>
 }
