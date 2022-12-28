@@ -9,18 +9,19 @@ import Status from "./Status";
 import Confirm from "./Confirm";
 
 
-const EMPTY   = "EMPTY";
-const SHOW    = "SHOW";
-const CREATE  = "CREATE";
-const SAVING  = "SAVING";
-const DELETING = "DELETING";
-const CONFIRM = "CONFIRM";
+const EMPTY     = "EMPTY";
+const SHOW      = "SHOW";
+const CREATE    = "CREATE";
+const SAVING    = "SAVING";
+const DELETING  = "DELETING";
+const CONFIRM   = "CONFIRM";
+const EDIT      = "EDIT"
 
 export default function Appointment (props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
-
+  console.log(props.interview);
   const save = async (name, interviewer) => {
     const interview = {
       student: name,
@@ -35,21 +36,19 @@ export default function Appointment (props) {
     }
   }
 
-  const confirmDelete = function() {
-    transition(CONFIRM);
-  }
   const deleteInterview = async () => {
     transition(DELETING);
     const res = await props.cancelInterview(props.id);
-    console.log(res);
+
     if(res.status === 204) {
       transition(EMPTY);
       props.removeInterviewFromClient(props.id)
     } else {
       transition(SHOW);
     }
-    
   }
+
+  
 
   return <article className="appointment">
     <Header time={props.time}></Header>
@@ -60,12 +59,13 @@ export default function Appointment (props) {
       message={"Are you sure you want to delete?"}
       onCancel={back}
       onConfirm={deleteInterview}
-      ></Confirm>}
+    ></Confirm>}
     {mode === SHOW && (
       <Show
         student={props.interview.student}
         interviewer={props.interview.interviewer}
-        onDelete={confirmDelete}
+        onDelete={()=>transition(CONFIRM)}
+        onEdit={() => transition(EDIT)}
       />
     )}
     {mode === CREATE && <Form
@@ -73,6 +73,13 @@ export default function Appointment (props) {
     onCancel={back}
     onSave={save}
     ></Form>}
+    {mode === EDIT && <Form
+      interviewers={props.interviewers}
+      onCancel={back}
+      onSave={save}
+      student={props.interview.student}
+      interviewer={props.interview.interviewer.id}>
+    </Form>}
       
   </article>
 }
