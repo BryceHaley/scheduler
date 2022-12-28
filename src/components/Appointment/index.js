@@ -26,7 +26,6 @@ export default function Appointment (props) {
   );
 
   const save = async (name, interviewer) => {
-    console.log('interviewer',interviewer)
     if (name === "" || !interviewer) {
       transition(ERROR_SAVE, true);
     } else {
@@ -53,16 +52,16 @@ export default function Appointment (props) {
     transition(DELETING, true);
     try {
       const res = await props.cancelInterview(props.id);
-    if(res.status === 204) {
-      transition(EMPTY);
-      props.removeInterviewFromClient(props.id)
-    } else {
+      if(res.status === 204) {
+        transition(EMPTY);
+        props.removeInterviewFromClient(props.id)
+      } else {
+        transition(ERROR_DELETE, true);
+      }
+    } catch (error){
+      console.error(error);
       transition(ERROR_DELETE, true);
     }
-  } catch (error){
-    console.error(error);
-    transition(ERROR_DELETE, true);
-  }
   }
 
   

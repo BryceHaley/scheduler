@@ -6,12 +6,15 @@ const APPOINTMENTS = "http://localhost:8001/api/appointments"
 const INTERVIEWERS = "http://localhost:8001/api/interviewers"
 
 export default function useApplicationData() {
+
+
   const [state, setState] = useState({
     day: "Monday",
     days: [],
     interviewers: {},
     appointments: {}
   });
+  console.log(state.days[4]);
 
   useEffect(()=> {
     Promise.all([
@@ -24,6 +27,18 @@ export default function useApplicationData() {
   }, []);
 
   const setDay = day => setState(prev => ({ ...prev, day }));
+
+  const updateSpots = function(num) {
+    let dayId;
+    for (const dayObj of state.days) {
+      if (dayObj.name === state.day) {
+        dayId = dayObj.id;
+      }
+    }
+    const updatedDays = state.days;
+    updatedDays[dayId-1].spots = updatedDays[dayId-1].spots + num;
+    setState(prev => ({...prev, days: updatedDays}));
+  }
 
   const bookInterviews = async (id, interview) => {
     const appointment = {
@@ -38,6 +53,7 @@ export default function useApplicationData() {
     
     const response =  await axios.put(APPOINTMENTS + "/" + id, appointment)
       .then(setState({...state, appointments}))
+      .then(updateSpots(-1));
     
       return response;
   };
@@ -60,6 +76,7 @@ export default function useApplicationData() {
       [id]: appointment
     };
     setState({...state, appointments})
+    updateSpots(1);
   }
 
   return {state, setDay, bookInterviews, cancelInterview, removeInterviewFromClient}
