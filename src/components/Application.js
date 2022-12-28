@@ -11,17 +11,14 @@ const GET_DAYS = "http://localhost:8001/api/days"
 const GET_APPOINTMENTS = "http://localhost:8001/api/appointments"
 const GET_INTERVIEWERS = "http://localhost:8001/api/interviewers"
 
-
-
 export default function Application(props) {
+  
   const [state, setState] = useState({
     day: "Monday",
     days: [],
     interviewers: {},
     appointments: {}
   });
-
-  const setDay = day => setState(prev => ({ ...prev, day }));
 
   useEffect(()=> {
     Promise.all([
@@ -33,9 +30,26 @@ export default function Application(props) {
     })
   }, []);
 
+  const setDay = day => setState(prev => ({ ...prev, day }));
+  
+  const bookInterviews = function(id, interview) {
+    console.log(id, interview);
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    console.log(appointments);
+    setState({...state, appointments});
+  }
+
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const dailyInterviews = getInterviewersForDay(state, state.day);
-
+  
   const appointmentComponents = dailyAppointments.map(appointment => {
     const interview = getInterview(state, appointment.interview)
     return <Appointment
@@ -44,6 +58,7 @@ export default function Application(props) {
       time={appointment.time}
       interview={interview}
       interviewers={dailyInterviews}
+      bookInterviews={bookInterviews}
     />;
   });
 
