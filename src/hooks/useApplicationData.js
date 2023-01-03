@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const DAYS = "http://localhost:8001/api/days"
-const APPOINTMENTS = "http://localhost:8001/api/appointments"
-const INTERVIEWERS = "http://localhost:8001/api/interviewers"
+const DAYS = "/api/days"
+const APPOINTMENTS = "/api/appointments"
+const INTERVIEWERS = "/api/interviewers"
 
 export default function useApplicationData() {
 
@@ -34,9 +34,13 @@ export default function useApplicationData() {
         dayId = dayObj.id;
       }
     }
-    const updatedDays = state.days;
-    updatedDays[dayId-1].spots = updatedDays[dayId-1].spots + num;
-    setState(prev => ({...prev, days: updatedDays}));
+ 
+    setState(prev => {
+      const updatedDays = [...prev.days];
+      updatedDays[dayId-1] = {...prev.days[dayId-1]}
+      updatedDays[dayId-1].spots = updatedDays[dayId-1].spots + num;
+      return {...prev, days: updatedDays}
+    });
   }
 
   const bookInterviews = async (id, interview) => {
@@ -51,8 +55,11 @@ export default function useApplicationData() {
     };
     
     const response =  await axios.put(APPOINTMENTS + "/" + id, appointment)
-      .then(setState({...state, appointments}))
-      .then(updateSpots(-1));
+      if (response.status === 204) {
+        setState({...state, appointments});
+        updateSpots(-1);
+        console.log(response)
+      }
     
       return response;
   };
@@ -79,4 +86,4 @@ export default function useApplicationData() {
   }
 
   return {state, setDay, bookInterviews, cancelInterview, removeInterviewFromClient}
-}
+};
