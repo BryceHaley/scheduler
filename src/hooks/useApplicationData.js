@@ -58,9 +58,7 @@ export default function useApplicationData() {
       if (response.status === 204) {
         setState({...state, appointments});
         updateSpots(-1);
-        console.log(response)
       }
-    
       return response;
   };
 
