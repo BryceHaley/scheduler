@@ -1,23 +1,31 @@
 # Interview Scheduler
 
+A react single page app to for an interview scheduler.
+
 ## Setup
 
 Install dependencies with `npm install`.
 
-## Running Webpack Development Server
+## Run the App with:
 
-```sh
+```
 npm start
 ```
 
-## Running Jest Test Framework
+## Run the cypress tests with:
 
-```sh
-npm test
+```
+npm run cypress
 ```
 
-## Running Storybook Visual Testbed
-
-```sh
-npm run storybook
+## Run other Jest tests with:
 ```
+npm run test
+``` 
+
+### Features:
+1. Add appointments
+2. Delete appointments
+3. Modify appointments
+
+### Images:
