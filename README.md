@@ -29,3 +29,6 @@ npm run test
 3. Modify appointments
 
 ### Images:
+!(default state of app)[https://github.com/BryceHaley/scheduler/blob/master/public/readme_images/default.png?raw=true]
+!(adding an appointment)[https://github.com/BryceHaley/scheduler/blob/master/public/readme_images/create.png?raw=true]
+!(deleting an appointment)[https://github.com/BryceHaley/scheduler/blob/master/public/readme_images/delete.png?raw=true]
