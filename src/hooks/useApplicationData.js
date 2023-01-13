@@ -44,6 +44,10 @@ export default function useApplicationData() {
   }
 
   const bookInterviews = async (id, interview) => {
+    const newAppointment = !state.appointments[id].interview;
+    console.log(state.appointments);
+    console.log(newAppointment);
+    
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -57,7 +61,9 @@ export default function useApplicationData() {
     const response =  await axios.put(APPOINTMENTS + "/" + id, appointment)
       if (response.status === 204) {
         setState({...state, appointments});
-        updateSpots(-1);
+        if (newAppointment){
+          updateSpots(-1);
+        }
       }
       return response;
   };
