@@ -22,6 +22,9 @@ npm run cypress
 ```
 npm run test
 ``` 
+## Backend
+Backend code can be found here: https://github.com/BryceHaley/scheduler-api
+
 
 ### Features:
 1. Add appointments
