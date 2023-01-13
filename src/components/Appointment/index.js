@@ -33,7 +33,7 @@ export default function Appointment (props) {
         student: name,
         interviewer
       };
-      transition(SAVING, true)
+      transition(SAVING)
       try {
         const res = await props.bookInterviews(props.id, interview);
         if(res.status === 204) {
