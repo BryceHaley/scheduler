@@ -31,6 +31,15 @@ Backend code can be found here: https://github.com/BryceHaley/scheduler-api
 2. Delete appointments
 3. Modify appointments
 
+### Dependencies
+    "axios": "^0.20.0",
+    "classnames": "^2.2.6",
+    "normalize.css": "^8.0.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-hooks-testing-library": "^0.6.0",
+    "react-scripts": "3.4.4"
+
 ### Images:
 ![default state of app](https://github.com/BryceHaley/scheduler/blob/master/public/readme_images/default.png?raw=true)
 
